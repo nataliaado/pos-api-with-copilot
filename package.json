@@ -1,0 +1,21 @@
+{
+  "name": "pos-api-with-copilot",
+  "version": "1.0.0",
+  "description": "API para automação de transferências e usuários.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "mocha 'test/**/*.test.js' --timeout 10000npm"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "chai": "^4.3.7",
+    "supertest": "^6.3.3",
+    "sinon": "^17.0.1"
+  }
+}
