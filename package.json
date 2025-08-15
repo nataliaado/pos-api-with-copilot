@@ -10,12 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "mocha": "^10.2.0",
     "chai": "^4.3.7",
-    "supertest": "^6.3.3",
-    "sinon": "^17.0.1"
+    "mocha": "^10.2.0",
+    "sinon": "^17.0.1",
+    "supertest": "^6.3.3"
   }
 }
