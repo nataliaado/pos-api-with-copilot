@@ -11,6 +11,16 @@ const transferService = require("../../service/transferService");
 
 // Testes
 describe("Transfer Controller", () => {
+  beforeEach(() => {
+    // Garante que o sinon começa limpo antes de cada teste
+    sinon.restore();
+  });
+
+  afterEach(() => {
+    // Garante que mesmo se o teste falhar, o mock é restaurado
+    sinon.restore();
+  });
+
   describe("POST/ transfers", () => {
     it("Quando informo remetente e destinatário inexistentes, recebo 400", async () => {
       const resposta = await request(app).post("/transfer").send({
@@ -18,6 +28,7 @@ describe("Transfer Controller", () => {
         to: "Lais",
         value: 100,
       });
+
       expect(resposta.status).to.equal(400);
       expect(resposta.body).to.have.property(
         "error",
@@ -29,9 +40,10 @@ describe("Transfer Controller", () => {
       // Mockar apenas a função transfer do Service
       const transferServiceMock = sinon.stub(transferService, "transferValue");
       transferServiceMock.throws(
-        new Error('Não é possível transferir para si mesmo'));
+        new Error("Não é possível transferir para si mesmo")
+      );
 
-      const resposta = await request(app).post('/transfer').send({
+      const resposta = await request(app).post("/transfer").send({
         from: "Natalia",
         to: "Natalia",
         value: 100,
@@ -39,12 +51,31 @@ describe("Transfer Controller", () => {
 
       expect(resposta.status).to.equal(400);
       expect(resposta.body).to.have.property(
-        'error',
-        'Usuário remetente ou destinatário não encontrado'
+        "error",
+        "Usuário remetente ou destinatário não encontrado"
       );
+    });
 
-      // Reseto o Mock
-      sinon.restore();
+    it("Usando Mocks: Quando informo valores válidos, recebo 201 CREATED", async () => {
+      // Mockar apenas a função transfer do Service
+      const transferServiceMock = sinon.stub(transferService, "transferValue");
+      transferServiceMock.returns({
+        from: "Natalia",
+        to: "Lais",
+        value: 100,
+        date: new Date().toISOString(),
+      });
+
+      const resposta = await request(app).post("/transfer").send({
+        from: "Natalia",
+        to: "Lais",
+        value: 100,
+      });
+
+      expect(resposta.status).to.equal(201);
+      expect(resposta.body).to.have.property("from", "Natalia");
+      expect(resposta.body).to.have.property("to", "Lais");
+      expect(resposta.body).to.have.property("value", 100);
     });
   });
 });
