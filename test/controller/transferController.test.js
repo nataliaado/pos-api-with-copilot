@@ -36,16 +36,17 @@ describe("Transfer Controller", () => {
       );
     });
 
+
     it("Usando Mocks: Quando informo remetente e destinatário inexistentes, recebo 400", async () => {
       // Mockar apenas a função transfer do Service
       const transferServiceMock = sinon.stub(transferService, "transferValue");
       transferServiceMock.throws(
-        new Error("Não é possível transferir para si mesmo")
+        new Error("Usuário remetente ou destinatário não encontrado")
       );
 
       const resposta = await request(app).post("/transfer").send({
         from: "Natalia",
-        to: "Natalia",
+        to: "Lais",
         value: 100,
       });
 
@@ -55,6 +56,7 @@ describe("Transfer Controller", () => {
         "Usuário remetente ou destinatário não encontrado"
       );
     });
+
 
     it("Usando Mocks: Quando informo valores válidos, recebo 201 CREATED", async () => {
       // Mockar apenas a função transfer do Service
