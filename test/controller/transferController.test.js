@@ -59,6 +59,11 @@ describe("Transfer Controller", () => {
 
 
     it("Usando Mocks: Quando informo valores válidos, recebo 201 CREATED", async () => {
+      // Preparando os Dados
+        // Carregar o arquivo
+        // Preparar a forma de ignorar os campos dinamicos
+
+
       // Mockar apenas a função transfer do Service
       const transferServiceMock = sinon.stub(transferService, "transferValue");
       transferServiceMock.returns({
@@ -75,6 +80,9 @@ describe("Transfer Controller", () => {
       });
 
       expect(resposta.status).to.equal(201);
+
+      // Um expect para comparar a Resposta.body com a String contida no arquivo
+
       expect(resposta.body).to.have.property("from", "Natalia");
       expect(resposta.body).to.have.property("to", "Lais");
       expect(resposta.body).to.have.property("value", 100);
