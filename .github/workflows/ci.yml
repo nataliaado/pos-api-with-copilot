@@ -22,14 +22,14 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
-      - name: Executar testes
-        run: npm run test-controller
-
       - name: Subir a API
         run: npm start &
-
+      
       - name: Esperar a API estar funcionando
-        run: sleep 5
+        run: npx wait-on http://localhost:3000
 
-      - name: Rodar os testes de API via HTTP
+      - name: Executar testes de controller
+        run: npm run test-controller
+
+      - name: Executar testes externos via HTTP
         run: npm run test-external
