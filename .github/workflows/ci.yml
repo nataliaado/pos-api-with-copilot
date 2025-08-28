@@ -24,9 +24,9 @@ jobs:
 
       - name: Subir a API
         run: npm start &
-      
+
       - name: Esperar a API estar funcionando
-        run: npx wait-on http://localhost:3000
+        run: npm run wait-api
 
       - name: Executar testes de controller
         run: npm run test-controller
