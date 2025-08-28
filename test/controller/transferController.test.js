@@ -24,7 +24,7 @@ describe("Transfer Controller", () => {
   describe("POST/ transfer", () => {
     it("Quando informo remetente e destinatário inexistentes, recebo 400", async () => {
          // 1) Capturar o Token
-           const respostaLogin = await request("http://localhost:3000")
+           const respostaLogin = await request(app)
              .post("/login")
              .send({
                username: "Natalia",
@@ -51,7 +51,7 @@ describe("Transfer Controller", () => {
 
     it("Usando Mocks: Quando informo remetente e destinatário inexistentes, recebo 400", async () => {
          // 1) Capturar o Token
-      const respostaLogin = await request("http://localhost:3000")
+      const respostaLogin = await request(app)
         .post("/login")
         .send({
           username: "Natalia",
@@ -84,7 +84,7 @@ describe("Transfer Controller", () => {
 
     it("Usando Mocks: Quando informo valores válidos, recebo 201 CREATED", async () => {
           // 1) Capturar o Token
-      const respostaLogin = await request("http://localhost:3000")
+      const respostaLogin = await request(app)
         .post("/login")
         .send({
           username: "Natalia",
