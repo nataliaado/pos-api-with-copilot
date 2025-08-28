@@ -14,7 +14,14 @@ exports.login = (req, res) => {
   const { username, password } = req.body;
   try {
     const user = userService.loginUser(username, password);
-    res.status(200).json(user);
+    // Gerar token JWT
+    const jwt = require("jsonwebtoken");
+    const token = jwt.sign(
+      { username: user.username },
+      process.env.JWT_SECRET || "segredo",
+      { expiresIn: "1h" }
+    );
+    res.status(200).json({ user, token });
   } catch (err) {
     res.status(401).json({ error: err.message });
   }
