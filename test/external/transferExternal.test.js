@@ -3,8 +3,8 @@ const request = require("supertest");
 const { expect } = require("chai");
 
 //Testes
-describe("transfers", () => {
-  describe("POST/ transfers", () => {
+describe("transfer via HTTP", () => {
+  describe("POST/ transfer", () => {
     it("Quando informo remetente e destinatário inexistentes, recebo 400, via HTTP", async () => {
       // 1) Capturar o Token
       const respostaLogin = await request("http://localhost:3000")

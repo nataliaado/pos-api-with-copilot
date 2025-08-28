@@ -21,7 +21,7 @@ describe("Transfer Controller", () => {
     sinon.restore();
   });
 
-  describe("POST/ transfers", () => {
+  describe("POST/ transfer", () => {
     it("Quando informo remetente e destinatário inexistentes, recebo 400", async () => {
          // 1) Capturar o Token
            const respostaLogin = await request("http://localhost:3000")
