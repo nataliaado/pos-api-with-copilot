@@ -11,36 +11,27 @@ const transferService = require("../../service/transferService");
 
 // Testes
 describe("Transfer Controller", () => {
-  beforeEach(() => {
-    // Garante que o sinon começa limpo antes de cada teste
-    sinon.restore();
-  });
-
-  afterEach(() => {
-    // Garante que mesmo se o teste falhar, o mock é restaurado
-    sinon.restore();
-  });
-
   describe("POST/ transfer", () => {
-    it("Quando informo remetente e destinatário inexistentes, recebo 400", async () => {
-         // 1) Capturar o Token
-           const respostaLogin = await request(app)
-             .post("/login")
-             .send({
-               username: "Natalia",
-               password: "123456"
-             });
-     
-           const token = respostaLogin.body.token;
-     
-      const resposta = await request(app)
-      .post("/transfer")
-      .set("authorization", `Bearer ${token}`)
-      .send({
-        from: "Natalia",
-        to: "Lais",
-        value: 100,
+    
+    beforeEach(async () => {
+      // 1) Capturar o Token
+      const respostaLogin = await request(app).post("/login").send({
+        username: "Natalia",
+        password: "123456",
       });
+
+      token = respostaLogin.body.token;
+    });
+
+    it("Quando informo remetente e destinatário inexistentes, recebo 400", async () => {
+      const resposta = await request(app)
+        .post("/transfer")
+        .set("authorization", `Bearer ${token}`)
+        .send({
+          from: "Natalia",
+          to: "Lais",
+          value: 100,
+        });
 
       expect(resposta.status).to.equal(400);
       expect(resposta.body).to.have.property(
@@ -50,16 +41,6 @@ describe("Transfer Controller", () => {
     });
 
     it("Usando Mocks: Quando informo remetente e destinatário inexistentes, recebo 400", async () => {
-         // 1) Capturar o Token
-      const respostaLogin = await request(app)
-        .post("/login")
-        .send({
-          username: "Natalia",
-          password: "123456"
-        });
-
-      const token = respostaLogin.body.token;
-     
       // Mockar apenas a função transfer do Service
       const transferServiceMock = sinon.stub(transferService, "transferValue");
       transferServiceMock.throws(
@@ -67,13 +48,13 @@ describe("Transfer Controller", () => {
       );
 
       const resposta = await request(app)
-      .post("/transfer")
-      .set("authorization", `Bearer ${token}`)
-      .send({
-        from: "Natalia",
-        to: "Lais",
-        value: 100,
-      });
+        .post("/transfer")
+        .set("authorization", `Bearer ${token}`)
+        .send({
+          from: "Natalia",
+          to: "Lais",
+          value: 100,
+        });
 
       expect(resposta.status).to.equal(400);
       expect(resposta.body).to.have.property(
@@ -83,16 +64,6 @@ describe("Transfer Controller", () => {
     });
 
     it("Usando Mocks: Quando informo valores válidos, recebo 201 CREATED", async () => {
-          // 1) Capturar o Token
-      const respostaLogin = await request(app)
-        .post("/login")
-        .send({
-          username: "Natalia",
-          password: "123456"
-        });
-
-      const token = respostaLogin.body.token;
-      
       // Mockar apenas a função transfer do Service
       const transferServiceMock = sinon.stub(transferService, "transferValue");
       transferServiceMock.returns({
@@ -103,18 +74,18 @@ describe("Transfer Controller", () => {
       });
 
       const resposta = await request(app)
-      .post("/transfer")
-      .set("authorization", `Bearer ${token}`)
-      .send({
-        from: "Natalia",
-        to: "Lais",
-        value: 100,
-      });
+        .post("/transfer")
+        .set("authorization", `Bearer ${token}`)
+        .send({
+          from: "Natalia",
+          to: "Lais",
+          value: 100,
+        });
 
       expect(resposta.status).to.equal(201);
 
       // Validação com um Fixture
-     const respostaEsperada = require("../fixture/respostas/quandoInformoValoresValidosReceboSucesso201Created.json");
+      const respostaEsperada = require("../fixture/respostas/quandoInformoValoresValidosReceboSucesso201Created.json");
       delete resposta.body.date;
       delete respostaEsperada.date;
       expect(resposta.body).to.deep.equal(respostaEsperada);
@@ -128,4 +99,10 @@ describe("Transfer Controller", () => {
       //console.log(resposta.body);
     });
   });
+
+  afterEach(() => {
+    // Garante que mesmo se o teste falhar, o mock é restaurado
+    sinon.restore();
+  });
+
 });
