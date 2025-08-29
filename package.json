@@ -5,14 +5,15 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "mocha 'test/**/*.test.js' --timeout 10000",
-    "test-controller": "mocha 'test/controller/**/*.test.js' --timeout 10000",
-    "test-external": "mocha 'test/external/**/*.test.js' --timeout 10000"
+    "test": "mocha test/**/*.test.js --timeout 10000",
+    "test-controller": "mocha test/controller/**/*.test.js --timeout 10000",
+    "test-external": "mocha test/external/**/*.test.js --timeout 10000"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
