@@ -5,6 +5,15 @@
     "version": "1.0.0",
     "description": "API para login, registro, consulta de usuários e transferências."
   },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
   "paths": {
     "/register": {
       "post": {
@@ -65,6 +74,7 @@
     },
     "/transfer": {
       "post": {
+        "security": [ { "bearerAuth": [] } ],
         "summary": "Realizar transferência",
         "requestBody": {
           "required": true,
@@ -90,6 +100,7 @@
     },
     "/transfers": {
       "get": {
+        "security": [ { "bearerAuth": [] } ],
         "summary": "Consultar transferências",
         "responses": {
           "200": { "description": "Lista de transferências" }
