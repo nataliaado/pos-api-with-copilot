@@ -8,7 +8,7 @@ const transferService = require("../../service/transferService");
 
 //Testes
 describe("Transfer via HTTP", () => {
-  describe("POST/ transfer", () => {
+  describe("POST/ transfer via HTTP", () => {
 
     beforeEach(async () => {
       const respostaLogin = await request("http://localhost:3000").post("/login").send({
@@ -37,7 +37,7 @@ describe("Transfer via HTTP", () => {
       );
     });
 
-    it("Quando informo valores válidos, recebo 201 CREATED", async () => {
+    it("Quando informo valores válidos, recebo 201 CREATED, via HTTP", async () => {
       const resposta = await request("http://localhost:3000")
         .post("/transfer")
         .set("authorization", `Bearer ${token}`)
