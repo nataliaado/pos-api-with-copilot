@@ -4,6 +4,11 @@ const users = [
     username: "Natalia",
     password: "123456",
     favorecido: true
+  },
+  {
+    username: "Lais",
+    password: "123456",
+    favorecido: true
   }
 ];
 

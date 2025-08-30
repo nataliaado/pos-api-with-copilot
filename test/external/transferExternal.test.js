@@ -1,25 +1,26 @@
 // Bibliotecas
 const request = require("supertest");
+const sinon = require("sinon");
 const { expect } = require("chai");
 
+//Mock
+const transferService = require("../../service/transferService");
+
 //Testes
-describe("transfer via HTTP", () => {
+describe("Transfer via HTTP", () => {
   describe("POST/ transfer", () => {
+
+    beforeEach(async () => {
+      const respostaLogin = await request("http://localhost:3000").post("/login").send({
+        username: "Natalia",
+        password: "123456",
+      });
+
+      token = respostaLogin.body.token;
+    });
+
     it("Quando informo remetente e destinatário inexistentes, recebo 400, via HTTP", async () => {
-      // 1) Capturar o Token
-      const respostaLogin = await request("http://localhost:3000")
-        .post("/login")
-        .send({
-          username: "Natalia",
-          password: "123456"
-        });
-
-      const token = respostaLogin.body.token;
-
-      //console.log(token);
-      //console.log(respostaLogin.body);
-
-      // 2) Realizar a Transferencia
+      // Realizar a Transferencia
       const resposta = await request("http://localhost:3000")
         .post("/transfer")
         .set("authorization", `Bearer ${token}`)
@@ -35,5 +36,28 @@ describe("transfer via HTTP", () => {
         "Usuário remetente ou destinatário não encontrado"
       );
     });
+
+    it("Quando informo valores válidos, recebo 201 CREATED", async () => {
+      const resposta = await request("http://localhost:3000")
+        .post("/transfer")
+        .set("authorization", `Bearer ${token}`)
+        .send({
+          from: "Natalia",
+          to: "Lais",
+          value: 100,
+        });
+
+      expect(resposta.status).to.equal(201);
+
+      // Validação com um Fixture
+      const respostaEsperada = require("../fixture/respostas/quandoInformoValoresValidosReceboSucesso201Created.json");
+      delete resposta.body.date;
+      delete respostaEsperada.date;
+      expect(resposta.body).to.deep.equal(respostaEsperada);
+    });
+  });
+
+  afterEach(() => {
+    sinon.restore();
   });
 });
