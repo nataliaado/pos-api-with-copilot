@@ -27,7 +27,7 @@ node server.js
 
 A API estará disponível em `http://localhost:3000`.
 
-## Endpoints
+[...existing code...]
 
 - `POST /register` - Registrar usuário
 - `POST /login` - Login de usuário
@@ -37,6 +37,83 @@ A API estará disponível em `http://localhost:3000`.
 - `GET /api-docs` - Documentação Swagger
 
 ## Regras de Negócio
+
+---
+
+# API GraphQL
+
+Agora este projeto também expõe uma interface GraphQL usando ApolloServer e Express.
+
+## Instalação das dependências GraphQL
+
+```bash
+npm install apollo-server-express@3 express@4 graphql jsonwebtoken dotenv
+```
+
+## Estrutura de Diretórios GraphQL
+
+- `graphql/app.js` - Configuração do ApolloServer e Express
+- `graphql/server.js` - Inicialização do servidor
+- `graphql/schema.js` - Definição dos Types, Queries e Mutations
+- `graphql/resolvers.js` - Implementação das resolvers
+- `graphql/auth.js` - Middleware de autenticação JWT
+
+## Como rodar a API GraphQL
+
+```bash
+node graphql/server.js
+npm run start-graphql
+```
+
+A API GraphQL estará disponível em `http://localhost:4000/graphql`.
+
+## Exemplos de Queries e Mutations
+
+### Login (Query)
+
+```graphql
+query {
+  login(username: "Natalia", password: "123456") {
+    token
+    user {
+      username
+      favorecido
+    }
+  }
+}
+```
+
+### Registrar Usuário (Mutation)
+
+```graphql
+mutation {
+  registerUser(username: "Joaquim", password: "123456", favorecido: true) {
+    username
+    favorecido
+  }
+}
+```
+
+### Transferência (Mutation, requer JWT)
+
+```graphql
+mutation {
+  transfer(from: "Natalia", to: "Lais", value: 100) {
+    from
+    to
+    value
+    date
+  }
+}
+```
+
+No header da requisição, inclua:
+
+```
+Authorization: Bearer <token>
+```
+
+---
 
 1. Login exige usuário e senha.
 2. Não é possível registrar usuários duplicados.
