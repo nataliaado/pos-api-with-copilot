@@ -25,8 +25,11 @@ jobs:
       - name: Executar testes
         run: npm run test-controller
 
+      - name: Instalar concurrently
+        run: npm install concurrently
+
       - name: Subir a API
-        run: npm start &
+        run: npm run start-graphql &
 
       - name: Esperar a API estar funcionando
         run: sleep 5
