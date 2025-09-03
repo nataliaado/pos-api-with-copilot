@@ -7,8 +7,8 @@ const { expect } = require("chai");
 const transferService = require("../../service/transferService");
 
 //Testes
-describe("Transfer via HTTP", () => {
-  describe("POST/ transfer via HTTP", () => {
+describe("REST - Transfer via HTTP", () => {
+  describe("REST - POST/ transfer via HTTP", () => {
 
     beforeEach(async () => {
       const respostaLogin = await request("http://localhost:3000").post("/login").send({
