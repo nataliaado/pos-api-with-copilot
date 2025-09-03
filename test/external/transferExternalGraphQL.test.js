@@ -1,5 +1,6 @@
 const request = require("supertest");
 const { expect } = require("chai");
+const sinon = require("sinon");
 
 describe("GRAPHQL - Transfer via HTTP", () => {
   beforeEach(async () => {
@@ -97,4 +98,8 @@ describe("GRAPHQL - Transfer via HTTP", () => {
       .to.have.nested.property("errors[0].message")
       .that.includes("Usuário não autenticado");
   });
+
+    afterEach(() => {
+      sinon.restore();
+    });
 });
