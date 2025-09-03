@@ -25,8 +25,14 @@ jobs:
       - name: Executar testes
         run: npm run test-controller
 
-      - name: Subir a API
+      - name: Subir a API REST
         run: npm start &
+
+      - name: Esperar a API estar funcionando
+        run: sleep 5
+
+      - name: Subir a API GraphQL
+        run: npm start start-graphql
 
       - name: Esperar a API estar funcionando
         run: sleep 5
