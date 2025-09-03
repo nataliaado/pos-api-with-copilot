@@ -26,7 +26,10 @@ jobs:
         run: npm run test-controller
 
       - name: Subir a API REST
-        run: npm run start
+        run: npm run start &
+
+      - name: Esperar a API estar funcionando
+        run: sleep 5
 
       - name: Instalar concurrently
         run: npm install concurrently
