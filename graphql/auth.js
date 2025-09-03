@@ -3,14 +3,19 @@ const SECRET = process.env.JWT_SECRET || "segredo";
 
 module.exports = (req) => {
   const authHeader = req.headers.authorization || "";
-  if (authHeader.startsWith("Bearer ")) {
-    const token = authHeader.replace("Bearer ", "");
-    try {
-      const user = jwt.verify(token, SECRET);
-      return { user };
-    } catch (err) {
-      return {};
-    }
+
+  if (!authHeader.startsWith("Bearer ")) {
+    console.warn("Header de autorização ausente ou mal formatado");
+    return {};
   }
-  return {};
+
+  const token = authHeader.replace("Bearer ", "").trim();
+
+  try {
+    const user = jwt.verify(token, SECRET);
+    return { user };
+  } catch (err) {
+    console.warn("Token inválido:", err.message);
+    return {};
+  }
 };

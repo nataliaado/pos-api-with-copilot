@@ -1,12 +1,30 @@
-// Configuração do ApolloServer e Express para GraphQL
+// app.js
 const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
-const auth = require("./auth");
+const jwt = require("jsonwebtoken");
+
+const SECRET = process.env.JWT_SECRET || "segredo";
 
 const app = express();
 app.use(express.json());
+
+function auth(req) {
+  const authHeader = req.headers.authorization || "";
+  const token = authHeader.split(" ")[1];
+
+  if (token) {
+    try {
+      const user = jwt.verify(token, SECRET);
+      return { user };
+    } catch (err) {
+      console.warn("Token inválido:", err.message);
+    }
+  }
+
+  return {};
+}
 
 const server = new ApolloServer({
   typeDefs,
@@ -21,4 +39,4 @@ async function startApolloServer() {
 
 startApolloServer();
 
-module.exports = app; // Para testes com Supertest
+module.exports = app;

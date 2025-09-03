@@ -1,37 +1,65 @@
-const userService = require("../service/userService");
-const transferService = require("../service/transferService");
 const jwt = require("jsonwebtoken");
+const { users } = require("../model/userModel");
 
 const SECRET = process.env.JWT_SECRET || "segredo";
+const transferencias = [];
 
-module.exports = {
+const resolvers = {
   Query: {
-    login: async (_, { username, password }) => {
-      const user = await userService.loginUser(username, password);
-      if (!user) throw new Error("Usuário ou senha inválidos");
+    login: (_, { username, password }) => {
+      const user = users.find(
+        (u) => u.username === username && u.password === password
+      );
+      if (!user) {
+        throw new Error("Login ou senha inválidos");
+      }
+
       const token = jwt.sign({ username: user.username }, SECRET, {
         expiresIn: "1h",
       });
+
       return { token, user };
     },
-    users: async () => userService.getUsers(),
-    transfers: async () => transferService.getAllTransfers(),
+
+    users: () => users,
+
+    transfers: () => transferencias,
   },
+
   Mutation: {
-    registerUser: async (_, { username, password, favorecido }) => {
-      try {
-        return await userService.registerUser(username, password, favorecido);
-      } catch (err) {
-        throw new Error(err.message);
+    registerUser: (_, { username, password, favorecido }) => {
+      const existente = users.find((u) => u.username === username);
+      if (existente) {
+        throw new Error("Usuário já existe");
       }
+
+      const novoUsuario = { username, password, favorecido };
+      users.push(novoUsuario);
+      return novoUsuario;
     },
-    transfer: async (_, { from, to, value }, context) => {
-      if (!context.user) throw new Error("Token JWT ausente ou inválido");
-      try {
-        return await transferService.transferValue(from, to, value);
-      } catch (err) {
-        throw new Error(err.message);
+
+    transfer: (_, { from, to, value }, context) => {
+      const user = context.user;
+
+      if (!user) {
+        throw new Error("Usuário não autenticado");
       }
+
+      if (user.username !== from) {
+        throw new Error("Usuário não autorizado para transferir dessa conta");
+      }
+
+      const novaTransferencia = {
+        from,
+        to,
+        value,
+        date: new Date().toISOString(),
+      };
+
+      transferencias.push(novaTransferencia);
+      return novaTransferencia;
     },
   },
 };
+
+module.exports = resolvers;

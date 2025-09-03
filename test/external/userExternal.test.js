@@ -3,14 +3,13 @@ const request = require("supertest");
 const sinon = require("sinon");
 const { expect } = require("chai");
 
-// Aplicação
 const app = require("../../app");
 
 //Mock
 const userService = require("../../service/userService");
 
 // Testes
-describe("User via HTTP", () => {
+describe("REST - User via HTTP", () => {
   describe("POST/ register via HTTP", () => {
     it("Quando quero registrar um usuário, recebo 201, via HTTP", async () => {
       const resposta = await request("http://localhost:3000").post("/register").send({
