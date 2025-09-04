@@ -3,16 +3,17 @@ const request = require("supertest");
 const sinon = require("sinon");
 const { expect } = require("chai");
 
-const app = require("../../app");
+// Aplicação
+const app = require("../../../app");
 
 //Mock
-const userService = require("../../service/userService");
+const userService = require("../../../service/userService");
 
 // Testes
-describe("REST - User via HTTP", () => {
-  describe("POST/ register via HTTP", () => {
-    it("Quando quero registrar um usuário, recebo 201, via HTTP", async () => {
-      const resposta = await request("http://localhost:3000").post("/register").send({
+describe("User Controller", () => {
+  describe("POST/ register", () => {
+    it("Quando quero registrar um usuário, recebo 201", async () => {
+      const resposta = await request(app).post("/register").send({
         username: "Joaquim",
         password: "123456",
         favorecido: true,
@@ -21,8 +22,8 @@ describe("REST - User via HTTP", () => {
       expect(resposta.status).to.equal(201);
     });
 
-    it("Quando quero registrar um usuário já cadastrado, recebo 400, via HTTP", async () => {
-      const resposta = await request("http://localhost:3000").post("/register").send({
+    it("Quando quero registrar um usuário já cadastrado, recebo 400", async () => {
+      const resposta = await request(app).post("/register").send({
         username: "Natalia",
         password: "123456",
         favorecido: true,
@@ -32,12 +33,12 @@ describe("REST - User via HTTP", () => {
       expect(resposta.body).to.have.property("error", "Usuário já existe");
     });
 
-    it("Usando Mocks: Quando quero registrar um usuário já cadastrado, recebo 400, via HTTP", async () => {
+    it("Usando Mocks: Quando quero registrar um usuário já cadastrado, recebo 400", async () => {
       // Mockar apenas a função do Service
       const userServiceMock = sinon.stub(userService, "registerUser");
       userServiceMock.throws(new Error("Usuário já existe"));
 
-      const resposta = await request("http://localhost:3000").post("/register").send({
+      const resposta = await request(app).post("/register").send({
         username: "Natalia",
         password: "123456",
         favorecido: true,
@@ -47,5 +48,4 @@ describe("REST - User via HTTP", () => {
       expect(resposta.body).to.have.property("error", "Usuário já existe");
     });
   });
-
 });

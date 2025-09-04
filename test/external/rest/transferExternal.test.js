@@ -4,7 +4,7 @@ const sinon = require("sinon");
 const { expect } = require("chai");
 
 //Mock
-const transferService = require("../../service/transferService");
+const transferService = require("../../../service/transferService");
 
 //Testes
 describe("REST - Transfer via HTTP", () => {
@@ -50,7 +50,7 @@ describe("REST - Transfer via HTTP", () => {
       expect(resposta.status).to.equal(201);
 
       // Validação com um Fixture
-      const respostaEsperada = require("../fixture/respostas/quandoInformoValoresValidosReceboSucesso201Created.json");
+      const respostaEsperada = require("../../fixture/respostas/quandoInformoValoresValidosReceboSucesso201Created.json");
       delete resposta.body.date;
       delete respostaEsperada.date;
       expect(resposta.body).to.deep.equal(respostaEsperada);
