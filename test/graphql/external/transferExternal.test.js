@@ -1,5 +1,6 @@
 const request = require("supertest");
 const { expect, use } = require("chai");
+require("dotenv").config();
 
 const chaiExclude = require("chai-exclude");
 use(chaiExclude);
@@ -7,7 +8,7 @@ use(chaiExclude);
 describe("GRAPHQL - Transfer via HTTP", () => {
   before(async () => {
     const loginUser = require("../fixture/requisicoes/login/loginUser.json");
-    const resposta = await request("http://localhost:4000/graphql")
+    const resposta = await request(process.env.BASE_URL_GRAPHQL)
       .post("")
       .send(loginUser);
 
@@ -21,7 +22,7 @@ describe("GRAPHQL - Transfer via HTTP", () => {
   it("Quando informo valores válidos, recebo 200 CREATED, via HTTP", async () => {
     const respostaEsperada = require("../fixture/respostas/transferencia/validarTransferenciaFeitaComSucesso.json");
 
-    const respostaTransfer = await request("http://localhost:4000/graphql")
+    const respostaTransfer = await request(process.env.BASE_URL_GRAPHQL)
       .post("")
       .set("Authorization", `Bearer ${token}`)
       .send(createTransfer);
@@ -34,7 +35,7 @@ describe("GRAPHQL - Transfer via HTTP", () => {
     createTransfer.variables.from = "Nicole";
     createTransfer.variables.to = "Natalia";
 
-    const respostaTransfer = await request("http://localhost:4000/graphql")
+    const respostaTransfer = await request(process.env.BASE_URL_GRAPHQL)
       .post("")
       .set("Authorization", `Bearer ${token}`)
       .send(createTransfer);
@@ -48,7 +49,7 @@ describe("GRAPHQL - Transfer via HTTP", () => {
     createTransfer.variables.from = "Nicole";
     createTransfer.variables.to = "Natalia";
 
-    const respostaTransfer = await request("http://localhost:4000/graphql")
+    const respostaTransfer = await request(process.env.BASE_URL_GRAPHQL)
       .post("")
       .send(createTransfer);
 

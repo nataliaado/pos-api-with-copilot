@@ -2,6 +2,7 @@
 const request = require("supertest");
 const sinon = require("sinon");
 const { expect } = require("chai");
+require("dotenv").config();
 
 //Mock
 const transferService = require("../../../service/transferService");
@@ -11,7 +12,7 @@ describe("REST - Transfer via HTTP", () => {
   describe("REST - POST/ transfer via HTTP", () => {
 
     beforeEach(async () => {
-      const respostaLogin = await request("http://localhost:3000").post("/login").send({
+      const respostaLogin = await request(process.env.BASE_URL_REST).post("/login").send({
         username: "Natalia",
         password: "123456",
       });
@@ -21,7 +22,7 @@ describe("REST - Transfer via HTTP", () => {
 
     it("Quando informo remetente e destinatário inexistentes, recebo 400, via HTTP", async () => {
       // Realizar a Transferencia
-      const resposta = await request("http://localhost:3000")
+      const resposta = await request(process.env.BASE_URL_REST)
         .post("/transfer")
         .set("authorization", `Bearer ${token}`)
         .send({
@@ -38,7 +39,7 @@ describe("REST - Transfer via HTTP", () => {
     });
 
     it("Quando informo valores válidos, recebo 201 CREATED, via HTTP", async () => {
-      const resposta = await request("http://localhost:3000")
+      const resposta = await request(process.env.BASE_URL_REST)
         .post("/transfer")
         .set("authorization", `Bearer ${token}`)
         .send({

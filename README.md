@@ -10,6 +10,10 @@ Esta API permite realizar login, registro de usuários, consulta de usuários e 
    npm install express swagger-ui-express
    ```
 
+## Configuração
+
+Antes de seguir, crie um arquivo .env na pasta raiz contendo as propriedades BASE_URL_REST e BASE_URL_GRAPHQL com a URL desses serviços.
+
 ## Estrutura de Diretórios
 
 - `controller/` - Lógica das rotas
