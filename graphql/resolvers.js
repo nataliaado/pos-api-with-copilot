@@ -49,6 +49,10 @@ const resolvers = {
         throw new Error("Usuário não autorizado para transferir dessa conta");
       }
 
+      if (value > 5000) {
+        throw new Error("Transferências acima de 5000 não são permitidas");
+      }
+
       const novaTransferencia = {
         from,
         to,
